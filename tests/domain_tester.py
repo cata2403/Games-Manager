@@ -2,30 +2,33 @@ from domain.game import Game
 
 class DomainTester:
 
-    def __testGetters(self):
-        self.game = Game("joc",["rpg","shooter","mmo"],6,"ongoing")
-        assert self.game.get_name() == "joc"
-        assert self.game.get_type()[0] == "rpg"
-        assert self.game.get_type()[1] == "shooter"
-        assert self.game.get_type()[2] == "mmo"
-        assert self.game.get_rating() == 6
-        assert self.game.get_status() == "ongoing"
+    @staticmethod
+    def __testGetters():
+        game = Game("joc",["rpg","shooter","mmo"],6,"ongoing")
+        assert game.get_name() == "joc"
+        assert game.get_type()[0] == "rpg"
+        assert game.get_type()[1] == "shooter"
+        assert game.get_type()[2] == "mmo"
+        assert game.get_rating() == 6
+        assert game.get_status() == "ongoing"
 
-    def __testSetters(self):
-        self.game = Game("a",["survival","coop"],9,"finished")
-        self.game.set_name("Minecraft")
-        self.game.set_type(self.game.get_type()+["rpg"])
-        self.game.set_rating(self.game.get_rating()+1)
-        self.game.set_status("ongoing")
-        assert self.game.get_name() == "Minecraft"
-        assert self.game.get_type()[0] == "survival"
-        assert self.game.get_type()[1] == "coop"
-        assert self.game.get_type()[2] == "rpg"
-        assert self.game.get_rating() == 10
-        assert self.game.get_status() == "ongoing"
+    @staticmethod
+    def __testSetters():
+        game = Game("a",["survival","coop"],9,"finished")
+        game.set_name("Minecraft")
+        game.set_type(game.get_type()+["rpg"])
+        game.set_rating(game.get_rating()+1)
+        game.set_status("ongoing")
+        assert game.get_name() == "Minecraft"
+        assert game.get_type()[0] == "survival"
+        assert game.get_type()[1] == "coop"
+        assert game.get_type()[2] == "rpg"
+        assert game.get_rating() == 10
+        assert game.get_status() == "ongoing"
 
-    def testAllDomain(self):
-        self.__testGetters()
-        self.__testSetters()
+    @staticmethod
+    def testAllDomain():
+        DomainTester.__testGetters()
+        DomainTester.__testSetters()
 
 
