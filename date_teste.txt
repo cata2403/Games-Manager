@@ -1,4 +1,4 @@
-a,A,1,a
-b,A.B,2,b
-c,A.B.C,8,c
-d,A.D.C,90,d
+a|A|1|a
+b|A,B|2|b
+c|A,B,C|8|c
+d|A,D,C|90|d

@@ -8,7 +8,7 @@ from service.serv import GameService
 def save_game(popup, treeview, name_entry, genres_entry, status_combobox, score_spin, service:GameService):
 
     name = name_entry.get().strip()
-    genres = genres_entry.get().strip().split(",")
+    genres = genres_entry.get().strip()
     status = status_combobox.get().strip()
 
     try:
