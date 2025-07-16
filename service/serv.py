@@ -8,8 +8,10 @@ class GameService:
         self.__repo = repo
         self.__val = val
 
-    def addGame(self, name, type, rating, status):
+    def addGame(self, name, type, rating:int, status):
+        print(type(rating))
         game = Game(name, type, rating, status)
+        print(type(game.get_rating()))
         self.__val.validateGame(game)
         self.__repo.addGame(game)
 

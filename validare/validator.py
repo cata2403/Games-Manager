@@ -19,6 +19,8 @@ class Validator:
         return True
 
     def __validateRating(self, rating:int):
+        print(type(rating))
+        print(type(self.__max_r_len))
         if rating < 0 or rating > self.__max_r_len:
             return False
         return True

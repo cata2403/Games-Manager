@@ -1,5 +1,5 @@
 class Game:
-    def __init__(self, name, type, rating, status):
+    def __init__(self, name, type, rating:int, status):
         self.__name = name
         self.__type = type
         self.__rating = rating

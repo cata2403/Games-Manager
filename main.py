@@ -5,6 +5,7 @@ from tests.repo_tester import RepoTester
 from tests.serv_tester import ServTester
 from tests.validator_tester import ValidatorTester
 from validare.validator import Validator
+from gui.gui import mainwindow
 
 
 def runAllTests():
@@ -17,4 +18,5 @@ runAllTests()
 repo = GamesRepository("game_data.csv")
 val = Validator()
 serv = GameService(repo,val)
+mainwindow(serv)
 
