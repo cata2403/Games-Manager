@@ -11,13 +11,6 @@ class Validator:
             return False
         return True
 
-    def __validateTypes(self, types:list):
-        if len(types) == 0:
-            return False
-        if len(types) > self.__max_len:
-            return False
-        return True
-
     def __validateRating(self, rating:int):
         print(type(rating))
         print(type(self.__max_r_len))
@@ -30,5 +23,3 @@ class Validator:
             raise ValueError("Name cannot contain comma (',') or point ('.')")
         if self.__validateRating(game.get_rating()) == False:
             raise ValueError("Rating must be between 0 and " + str(self.__max_r_len))
-        if self.__validateTypes(game.get_type()) == False:
-            raise ValueError("Min 1 type, max ", self.__max_r_len, " types")

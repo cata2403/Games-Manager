@@ -14,7 +14,7 @@ def save_game(popup, treeview, name_entry, genres_entry, status_combobox, score_
     try:
         score = int(score_spin.get())
         print(type(score))
-        service.addGame(name, genres, status, score)
+        service.addGame(name, genres, score, status)
     except ValueError:
         return "Eroare"
 
