@@ -5,7 +5,7 @@ import tkinter.messagebox as msgbox
 from service.serv import GameService
 
 
-def save_game(popup, treeview, name_entry, genres_entry, status_combobox, score_spin, service:GameService):
+def save_game(popup, treeview, name_entry, genres_entry, status_combobox, score_spin, combobox, service:GameService):
 
     name = name_entry.get().strip()
     genres = genres_entry.get().strip()
@@ -25,12 +25,13 @@ def save_game(popup, treeview, name_entry, genres_entry, status_combobox, score_
         msgbox.showerror("Invalid score", "The score must be between 0 and 100!", parent = popup)
         return
 
-    row_tag = status.lower()
-    treeview.insert("", tk.END, values=(name, genres, status, score), tags=(row_tag,))
+    if status == combobox.get().strip():
+        row_tag = status.lower()
+        treeview.insert("", tk.END, values=(name, genres, status, score), tags=(row_tag,))
 
     popup.destroy()
 
-def update_game(popup, treeview, item_id, name_entry, genres_entry, status_combobox, score_spin, service:GameService):
+def update_game(popup, treeview, item_id, name_entry, genres_entry, status_combobox, score_spin, combobox, service:GameService):
 
     name= name_entry.get().strip()
     genres = genres_entry.get().strip()
@@ -49,11 +50,14 @@ def update_game(popup, treeview, item_id, name_entry, genres_entry, status_combo
         msgbox.showerror("Invalid score", "The score must be between 0 and 100!", parent = popup)
         return
 
-    row_tag = status.lower()
-    treeview.item(item_id, values=(name, genres, status, score), tags=(row_tag,))
+    if status == combobox.get().strip() or combobox.get().strip() == "All":
+        row_tag = status.lower()
+        treeview.item(item_id, values=(name, genres, status, score), tags=(row_tag,))
+    else:
+        treeview.delete(item_id)
     popup.destroy()
 
-def open_add_popup(root, treeview, service):
+def open_add_popup(root, treeview, combobox, service):
 
     popup = tk.Toplevel(root)
     popup.title("Add Game")
@@ -84,12 +88,12 @@ def open_add_popup(root, treeview, service):
     score_spin.delete(0, tk.END)
     score_spin.insert(0, "0")
 
-    add_button = ttk.Button(popup, text = "Add",command = lambda: save_game(popup, treeview, name_entry, genres_entry, status_combobox, score_spin, service))
+    add_button = ttk.Button(popup, text = "Add",command = lambda: save_game(popup, treeview, name_entry, genres_entry, status_combobox, score_spin, combobox, service))
     add_button.grid(row = 4, column = 0, columnspan = 2, pady = 10)
 
     name_entry.focus()
 
-def open_edit_popup(root, treeview, service):
+def open_edit_popup(root, treeview, combobox, service):
 
     selected = treeview.selection()
     if not selected:
@@ -132,7 +136,7 @@ def open_edit_popup(root, treeview, service):
     score_spin.delete(0, tk.END)
     score_spin.insert(0, current_score)
 
-    edit_button = ttk.Button(popup, text = "Save changes",command = lambda: update_game(popup, treeview, item_id, name_entry, genres_entry, status_combobox, score_spin, service))
+    edit_button = ttk.Button(popup, text = "Save changes",command = lambda: update_game(popup, treeview, item_id, name_entry, genres_entry, status_combobox, score_spin, combobox, service))
     edit_button.grid(row = 4, column = 0, columnspan = 2, pady = 10)
 
     name_entry.focus()
@@ -164,13 +168,20 @@ def load_data(treeview, games_list):
     clear_all(treeview)
     for game in games_list:
         name, genres, status, score = game.get_name(), game.get_type(), game.get_status(), game.get_rating()
-        treeview.insert("", tk.END, values=(name, genres, status, score))
-
+        row_tag = status.lower()
+        treeview.insert("", tk.END, values=(name, genres, status, score), tags=(row_tag,))
 
 def clear_all(tree):
 
    for item in tree.get_children():
       tree.delete(item)
+
+def combobox_selected_value(treeview, value, service:GameService):
+
+    if value == "All":
+        load_data(treeview, service.getAllGames())
+    else:
+        load_data(treeview, service.filterByStatus(value))
 
 def mainwindow(service:GameService):
 
@@ -186,16 +197,17 @@ def mainwindow(service:GameService):
     search_button = ttk.Button(searchbar_frame, text = "Search", command = lambda: load_data(games_tree, service.filterByName(searchbar_entry.get().strip())))
     search_button.grid(row = 0, column = 2, pady = (5,0), sticky = "W")
 
-    add_button = ttk.Button(root, text = "Add", command = lambda: open_add_popup(root, games_tree, service))
+    add_button = ttk.Button(root, text = "Add", command = lambda: open_add_popup(root, games_tree, combobox, service))
     add_button.grid(row = 1, column = 0, padx = 30, pady = 15)
-    edit_button = ttk.Button(root, text = "Edit", command = lambda: open_edit_popup(root, games_tree, service))
+    edit_button = ttk.Button(root, text = "Edit", command = lambda: open_edit_popup(root, games_tree, combobox, service))
     edit_button.grid(row = 1, column = 1, padx = 30, pady = 15)
     delete_button = ttk.Button(root, text = "Delete", command = lambda: delete_selected(games_tree, service))
     delete_button.grid(row = 1, column = 2,  padx = 30, pady = 15)
 
     combobox = ttk.Combobox(root ,values = ["All", "Finished", "Ongoing", "Upcoming"], state = "readonly")
-    combobox.set("Status")
+    combobox.set("All")
     combobox.grid(row = 2, column = 0, padx = (15,0), sticky = "W")
+    combobox.bind("<<ComboboxSelected>>", lambda event: combobox_selected_value(games_tree, combobox.get().strip(), service))
 
     columns = ("Name", "Genres", "Status", "Score")
     games_tree = ttk.Treeview(root, columns = columns, show = "headings", height=8)
@@ -206,7 +218,6 @@ def mainwindow(service:GameService):
     games_tree.tag_configure("finished", background="#c9f7c2")
     games_tree.tag_configure("ongoing", background="#fff6b3")
     games_tree.tag_configure("upcoming", background="#c7e9ff")
-
     load_data(games_tree, service.getAllGames())
 
     root.mainloop()
