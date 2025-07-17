@@ -15,7 +15,7 @@ def runAllTests():
     ServTester.testAllServ()
 
 runAllTests()
-repo = GamesRepository("game_data.csv")
+repo = GamesRepository("game_data.txt")
 val = Validator()
 serv = GameService(repo,val)
 mainwindow(serv)
