@@ -54,6 +54,14 @@ class ServTester:
         assert lst[0].get_name() == "b"
         assert lst[1].get_type() == "F"
         serv.deleteGame("bbb")
+        lst = serv.filterByStatus("c")
+        assert len(lst) == 1
+        assert lst[0].get_type() == "A,B,C"
+        serv.addGame("bbb","F",23,"d")
+        lst = serv.filterByStatus("d")
+        assert len(lst) == 2
+        assert lst[1].get_name() == "bbb"
+        serv.deleteGame("bbb")
 
     @staticmethod
     def testAllServ():

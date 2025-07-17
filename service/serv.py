@@ -29,6 +29,14 @@ class GameService:
                 filtered.append(game)
         return filtered
 
+    def filterByStatus(self, cond):
+        list = self.__repo.getAllGames()
+        filtered = []
+        for game in list:
+            if game.get_status() == cond:
+                filtered.append(game)
+        return filtered
+
     def getAllGames(self):
         return self.__repo.getAllGames()
 
