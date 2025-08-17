@@ -25,7 +25,7 @@ def save_game(popup, treeview, name_entry, genres_entry, status_combobox, score_
         msgbox.showerror("Invalid score", "The score must be between 0 and 100!", parent = popup)
         return
 
-    if status == combobox.get().strip():
+    if status == combobox.get().strip() or combobox.get().strip() == "All":
         row_tag = status.lower()
         treeview.insert("", tk.END, values=(name, genres, status, score), tags=(row_tag,))
 
