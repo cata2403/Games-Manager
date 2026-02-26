@@ -1,6 +1,6 @@
 # Games-Manager
 
-A lightweight desktop application designed for managing a personal video game collection. This project was developed as a collaborative effort to practice core OOP principles and basic GUI implementation.
+A lightweight desktop application designed for managing a personal video game collection. This project was developed as a collaborative effort to practice core OOP principles and basic GUI implementation in python.
 
 ---
 
